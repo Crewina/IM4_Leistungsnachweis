@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kopfstand – Frage</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="frage-container">
+
+    <!-- Header-Bereich -->
+    <div class="frage-header">
+      <img src="kopfstand-logo.svg" alt="Logo" class="logo-small" />
+      <button class="close-button" onclick="window.location.href='dashboard.html'">✕</button>
+    </div>
+
+    <!-- Icon und Titel -->
+    <div class="frage-topic">
+      <img src="icon-elefant.svg" alt="Elefant-Icon" class="elefant-icon" />
+      <h2>Langzeitgedächtnis</h2>
+    </div>
+
+    <!-- Fragekarte -->
+    <div class="frage-card">
+      <p class="frage-text">Wie speicherte man früher Musik – mit Kassette, CD oder MP3?</p>
+      <input type="text" id="antwort" class="antwort-input" placeholder="Schreibe eine Antwort..." />
+    </div>
+
+  </div>
+
+  <script src="js/frage.js"></script>
+</body>
+</html>

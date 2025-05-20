@@ -4,10 +4,14 @@ body {
   margin: 20px;
   max-width: 600px;
   line-height: 1.5;
+  background: linear-gradient(to bottom, #f0eaff 60%, #ffe69d 60%);
+  color: #0a003d;
 }
 
 h1 {
   margin-bottom: 1em;
+  font-size: 2rem;
+  color: #5a00ff;
 }
 
 form > div {
@@ -16,21 +20,270 @@ form > div {
 
 label {
   display: inline-block;
-  width: 80px;
+  width: 100%;
+  font-weight: bold;
+  margin-bottom: 0.3em;
 }
 
 input[type="email"],
 input[type="password"],
 input[type="text"] {
-  width: 200px;
-  padding: 4px;
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #999;
+  border-radius: 8px;
+  box-sizing: border-box;
 }
 
 button {
-  padding: 8px 16px;
+  padding: 10px 20px;
   cursor: pointer;
+  border: 2px solid #0a003d;
+  background-color: white;
+  color: #0a003d;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+button:hover {
+  background-color: #f5f5f5;
 }
 
 p {
   margin-top: 1em;
+}
+
+/* Zusatz für Layout & Struktur */
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.logo {
+  height: 60px;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+.login-box {
+  background: white;
+  border: 2px solid #5a00ff;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+}
+
+.register-hint {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.register-hint a {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-weight: bold;
+  color: #0a003d;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Hintergrund und Grundlayout */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f3ebff; /* helles Lila */
+  color: #0a003d;
+}
+
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Kopfbereich mit Logo und Avatar */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.logo {
+  height: 50px;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Titel und Untertitel */
+h1 {
+  font-size: 1.8rem;
+  margin: 0 0 0.5rem;
+}
+
+.subtitle {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+/* Karten-Stil */
+.card {
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.card-icon {
+  display: block;
+  margin: 1rem auto 0;
+  height: 40px;
+}
+
+/* Farbliche Varianten */
+.card.geistig {
+  background: #d4bfff;
+  border: 3px solid #5a00ff;
+  color: #4a00b3;
+}
+
+.card.koerperlich {
+  background: #ffe38c;
+  border: 3px solid #b36b00;
+  color: #b36b00;
+}
+
+.card.fortschritt {
+  background: #f3f3f3;
+  border: 3px solid #195f4c;
+  color: #195f4c;
+}
+
+/* Logout-Button */
+.logout-btn {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border: 2px solid #0a003d;
+  border-radius: 8px;
+  background-color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #eee;
+}
+
+/* Bereich für geschützte Inhalte */
+.protected-box {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #ffffff;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  min-height: 80px;
+}
+
+.frage-container {
+  background-color: #d4bfff;
+  min-height: 100vh;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+.frage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-small {
+  height: 50px;
+}
+
+.close-button {
+  font-size: 1.5rem;
+  background: white;
+  border: 2px solid #5a00ff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  color: #5a00ff;
+}
+
+.frage-topic {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.elefant-icon {
+  width: 100px;
+  margin-bottom: 1rem;
+}
+
+.frage-topic h2 {
+  color: #5a00ff;
+  font-size: 1.4rem;
+}
+
+.frage-card {
+  background: #f3ebff;
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  margin-top: 2rem;
+  min-height: 180px;
+}
+
+.frage-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #0a003d;
+}
+
+.antwort-input {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+a.card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
