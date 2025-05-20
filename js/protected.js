@@ -24,15 +24,15 @@ async function checkAuth() {
         <h1>Guten Tag ${sanitize(result.name || result.email)}</h1>
         <p class="subtitle">Starte dein Training:</p>
 
-        <a href="question.html" class="card geistig">
+        <a href="question.html?typ=I" class="card geistig">
         <p class="card-title">Deine geistigen Aufgaben</p>
         <img src="icon-geist.svg" alt="Gehirn-Icon" class="card-icon" />
-        </a>
-
-        <div class="card koerperlich">
-          <p class="card-title">Deine körperlichen<br />Aufgaben</p>
-          <img src="icon-pfote.svg" alt="Pfoten-Icon" class="card-icon" />
-        </div>
+      </a>
+      
+      <a href="question.html?typ=II" class="card koerperlich">
+        <p class="card-title">Deine körperlichen<br />Aufgaben</p>
+        <img src="icon-pfote.svg" alt="Pfoten-Icon" class="card-icon" />
+      </a>      
 
         <div class="card fortschritt">
           <p class="card-title">Dein Fortschritt</p>

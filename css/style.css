@@ -241,6 +241,14 @@ h1 {
   height: 40px;
   cursor: pointer;
   color: #5a00ff;
+
+    /* Zentrierung */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    /* Optional: kein Standard-Button-Stil */
+    padding: 0;
 }
 
 .frage-topic {
