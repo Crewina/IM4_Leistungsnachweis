@@ -26,17 +26,17 @@ async function checkAuth() {
 
         <a href="question.html?typ=I" class="card geistig">
         <p class="card-title">Deine geistigen Aufgaben</p>
-        <img src="icon-geist.svg" alt="Gehirn-Icon" class="card-icon" />
+        <img src="img/geistige_aufgaben_icon.svg" alt="Gehirn-Icon" class="card-icon" />
       </a>
       
       <a href="question.html?typ=II" class="card koerperlich">
         <p class="card-title">Deine körperlichen<br />Aufgaben</p>
-        <img src="icon-pfote.svg" alt="Pfoten-Icon" class="card-icon" />
+        <img src="img/körperlichen_aufgaben_icon.svg" alt="Pfoten-Icon" class="card-icon" />
       </a>      
 
         <div class="card fortschritt">
           <p class="card-title">Dein Fortschritt</p>
-          <img src="icon-flamme.svg" alt="Flammen-Icon" class="card-icon" />
+          <img src="img/fortschritt_icon.svg" alt="Flammen-Icon" class="card-icon" />
         </div>
 
       </main>
