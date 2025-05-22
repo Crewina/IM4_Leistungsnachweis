@@ -34,10 +34,10 @@ async function checkAuth() {
         <img src="img/körperlichen_aufgaben_icon.svg" alt="Pfoten-Icon" class="card-icon" />
       </a>      
 
-        <div class="card fortschritt">
-          <p class="card-title">Dein Fortschritt</p>
-          <img src="img/fortschritt_icon.svg" alt="Flammen-Icon" class="card-icon" />
-        </div>
+      <a href="progress.html" class="card fortschritt">
+      <p class="card-title">Dein Fortschritt</p>
+      <img src="img/fortschritt_icon.svg" alt="Flammen-Icon" class="card-icon" />
+    </a>    
 
       </main>
     `;

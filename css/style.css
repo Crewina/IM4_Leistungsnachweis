@@ -1,5 +1,7 @@
-/* style.css */
-body {
+/** style.css – vollständig korrigiert und modular **/
+
+/* Basis-Body-Layout für alle Seiten (wenn kein typ-i/typ-ii) */
+body:not(.typ-i):not(.typ-ii) {
   font-family: Arial, sans-serif;
   margin: 20px;
   max-width: 600px;
@@ -8,32 +10,32 @@ body {
   color: #0a003d;
 }
 
+/* Reset bei typ-i und typ-ii, damit keine doppelten Styles greifen */
+body.typ-i,
+body.typ-ii {
+  margin: 0;
+  padding: 0;
+  color: #0a003d;
+  font-family: Arial, sans-serif;
+}
+
+/* Container allgemeiner Aufbau */
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
 h1 {
-  margin-bottom: 1em;
-  font-size: 2rem;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
   color: #5a00ff;
 }
 
-form > div {
-  margin-bottom: 1em;
-}
-
-label {
-  display: inline-block;
-  width: 100%;
-  font-weight: bold;
-  margin-bottom: 0.3em;
-}
-
-input[type="email"],
-input[type="password"],
-input[type="text"] {
-  width: 100%;
-  padding: 8px;
-  font-size: 1rem;
-  border: 1px solid #999;
-  border-radius: 8px;
-  box-sizing: border-box;
+h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
 }
 
 button {
@@ -52,76 +54,7 @@ button:hover {
   background-color: #f5f5f5;
 }
 
-p {
-  margin-top: 1em;
-}
-
-/* Zusatz für Layout & Struktur */
-.container {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.logo {
-  height: 60px;
-  margin-bottom: 0.5rem;
-}
-
-.subtitle {
-  font-weight: bold;
-  margin-top: 0.5rem;
-}
-
-.login-box {
-  background: white;
-  border: 2px solid #5a00ff;
-  border-radius: 1rem;
-  padding: 2rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-h2 {
-  margin-top: 0;
-  margin-bottom: 1.5rem;
-  font-size: 1.4rem;
-}
-
-.register-hint {
-  margin-top: 2rem;
-  text-align: center;
-}
-
-.register-hint a {
-  display: inline-block;
-  margin-top: 0.5rem;
-  font-weight: bold;
-  color: #0a003d;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-/* Hintergrund und Grundlayout */
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background: #f3ebff; /* helles Lila */
-  color: #0a003d;
-}
-
-.container {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
-}
-
-/* Kopfbereich mit Logo und Avatar */
+/* Dashboard-spezifisches Layout */
 .dashboard-header {
   display: flex;
   justify-content: space-between;
@@ -140,19 +73,12 @@ body {
   object-fit: cover;
 }
 
-/* Titel und Untertitel */
-h1 {
-  font-size: 1.8rem;
-  margin: 0 0 0.5rem;
-}
-
 .subtitle {
   font-weight: bold;
   font-size: 1.1rem;
   margin-bottom: 2rem;
 }
 
-/* Karten-Stil */
 .card {
   border-radius: 12px;
   padding: 1.5rem;
@@ -168,7 +94,6 @@ h1 {
   height: 40px;
 }
 
-/* Farbliche Varianten */
 .card.geistig {
   background: #d4bfff;
   border: 3px solid #5a00ff;
@@ -187,39 +112,27 @@ h1 {
   color: #195f4c;
 }
 
-/* Logout-Button */
-.logout-btn {
-  width: 100%;
-  padding: 0.8rem;
-  font-size: 1rem;
-  border: 2px solid #0a003d;
+#logoutBtn {
+  display: block;
+  margin: 2rem auto;
+  padding: 0.8rem 1.5rem;
   border-radius: 8px;
+  border: 2px solid #0a003d;
   background-color: white;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
-.logout-btn:hover {
+#logoutBtn:hover {
   background-color: #eee;
 }
 
-/* Bereich für geschützte Inhalte */
-.protected-box {
-  margin-top: 2rem;
-  padding: 1rem;
-  background: #ffffff;
-  border: 2px dashed #ccc;
-  border-radius: 8px;
-  min-height: 80px;
-}
-
+/* Frageansicht */
 .frage-container {
-  background-color: #d4bfff;
   min-height: 100vh;
   padding: 1.5rem;
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
 }
 
 .frage-header {
@@ -241,14 +154,10 @@ h1 {
   height: 40px;
   cursor: pointer;
   color: #5a00ff;
-
-    /* Zentrierung */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  
-    /* Optional: kein Standard-Button-Stil */
-    padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }
 
 .frage-topic {
@@ -262,12 +171,10 @@ h1 {
 }
 
 .frage-topic h2 {
-  color: #5a00ff;
   font-size: 1.4rem;
 }
 
 .frage-card {
-  background: #f3ebff;
   border-radius: 16px;
   padding: 2rem 1.5rem;
   margin-top: 2rem;
@@ -294,4 +201,96 @@ a.card {
   text-decoration: none;
   color: inherit;
   display: block;
+}
+
+/* Typenspezifisch */
+body.typ-i .frage-container {
+  background-color: #CCB1FE;
+}
+
+body.typ-ii .frage-container {
+  background-color: #FFE29A;
+}
+
+body.typ-i .frage-topic h2 {
+  color: #5a00ff;
+}
+
+body.typ-ii .frage-topic h2 {
+  color: #b36b00;
+}
+
+body.typ-i .frage-card {
+  background: #e6d6ff;
+}
+
+body.typ-ii .frage-card {
+  background: #fff3c4;
+}
+/* Fortschritts-Seite */
+body.fortschritt-seite {
+  background: #EDDFB8;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #0a003d;
+}
+
+.fortschritt-container {
+  max-width: 393px;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fortschritt-inhalt {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.fortschritt-inhalt h2 {
+  color: #225132;
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+}
+
+.flamme-icon {
+  margin: 2rem 0 1rem;
+  width: 100px;
+}
+
+.kalender-box {
+  background: #fffaf0;
+  padding: 1.5rem;
+  border-radius: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.kalender-box table {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 1rem;
+  border-collapse: collapse;
+}
+
+.kalender-box td {
+  padding: 0.4rem;
+}
+
+.kalender-box .smiley {
+  font-size: 1.3rem;
+}
+
+.status-text {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.status-text strong {
+  color: #00005e;
 }
