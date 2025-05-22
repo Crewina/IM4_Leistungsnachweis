@@ -15,15 +15,15 @@
       <button class="close-button" onclick="window.location.href='protected.html'">✕</button>
     </div>
 
-    <!-- Icon und Titel (dynamisch durch JS befüllt) -->
+    <!-- Icon und Titel (werden dynamisch durch JS gesetzt) -->
     <div class="frage-topic">
       <img id="themen-icon" src="" alt="Aufgaben-Icon" class="elefant-icon" />
-      <h2 id="themen-titel"></h2>
+      <h2 id="themen-titel">Lade Aufgabe...</h2>
     </div>
 
-    <!-- Fragekarte -->
+    <!-- Fragekarte (Frage und Antwortfeld) -->
     <div class="frage-card">
-      <p class="frage-text">Wie speicherte man früher Musik – mit Kassette, CD oder MP3?</p>
+      <p class="frage-text" id="frage-text">Bitte warten...</p>
       <input type="text" id="antwort" class="antwort-input" placeholder="Schreibe eine Antwort..." />
     </div>
 
