@@ -1,6 +1,6 @@
 <?php
 $host = 'mq9yuh.myd.infomaniak.com';
-$db   = 'Aufgabenkatalog';
+$db   = 'mq9yuh_im4cv';
 $user = 'mq9yuh_im4cv';
 $pass = '9sZ.8pof-##7GI';
 $charset = 'utf8mb4';

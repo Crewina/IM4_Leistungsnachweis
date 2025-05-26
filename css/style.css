@@ -294,3 +294,16 @@ body.fortschritt-seite {
 .status-text strong {
   color: #00005e;
 }
+
+.naechste-btn {
+  display: block;
+  margin: 2rem auto 0;
+  padding: 0.8rem 1.5rem;
+  font-weight: bold;
+  font-size: 1rem;
+  border: 1.5px solid #0a003d;
+  background-color: white;
+  color: #0a003d;
+  border-radius: 12px;
+  cursor: pointer;
+}

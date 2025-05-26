@@ -1,82 +1,150 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const typ = urlParams.get("typ") || "I";
+const urlParams = new URLSearchParams(window.location.search);
+const typ = urlParams.get("typ"); // "I" (geistig) oder "II" (körperlich)
 
-  fetch(`api/question.php?typ=${typ}`)
+const kategorien = {
+  I: ["Langzeitgedächtnis", "Kurzzeitgedächtnis", "Sprachzentrum", "Logik", "Rätsel"],
+  II: ["Bewegung im Alltag", "Mobilisation", "Schritteziel"]
+};
+
+const fortschrittKey = typ === "I" ? "geistigeFortschritt" : "koerperFortschritt";
+const kategorieListe = kategorien[typ];
+let aktuellerIndex = 0;
+let aktuelleKategorie = "";
+
+// DOM Ready
+document.addEventListener("DOMContentLoaded", () => {
+  if (!typ || !kategorieListe) {
+    document.querySelector(".frage-text").textContent = "Fehler: Kein gültiger Typ übergeben.";
+    return;
+  }
+
+  const fortschritt = JSON.parse(localStorage.getItem(fortschrittKey) || "[]");
+  aktuellerIndex = fortschritt.length;
+
+  if (aktuellerIndex >= kategorieListe.length) {
+    zeigeAbschluss();
+    return;
+  }
+
+  aktuelleKategorie = kategorieListe[aktuellerIndex];
+  ladeAufgabe(aktuelleKategorie);
+
+  const button = document.getElementById("check-button");
+  if (typ === "I" && button) {
+    button.addEventListener("click", pruefeAntwort);
+  } else if (typ === "II" && button) {
+    button.addEventListener("click", () => {
+      speichereFortschritt(aktuelleKategorie);
+      location.reload();
+    });
+  }
+});
+
+function ladeAufgabe(kategorie) {
+  fetch(`api/question.php?typ=${typ}&kategorie=${encodeURIComponent(kategorie)}`)
     .then(res => res.json())
     .then(data => {
-      if (data && data.Aufgabe) {
-        document.querySelector(".frage-text").textContent = data.Aufgabe;
-        document.querySelector(".antwort-input").dataset.correct = data.Antwort.toLowerCase();
-        document.getElementById("themen-titel").textContent = data.Kategorie;
-      } else {
-        document.querySelector(".frage-text").textContent = "Keine Frage gefunden.";
+      if (!data || !data.Aufgabe) {
+        document.querySelector(".frage-text").textContent = "Keine Aufgabe gefunden.";
+        console.warn("Antwort von API:", data);
+        return;
+      }
+
+      document.getElementById("themen-titel").textContent = kategorie;
+      document.getElementById("frage-text").textContent = data.Aufgabe;
+
+      if (typ === "I" && data.Antwort) {
+        document.getElementById("antwort").dataset.correct = data.Antwort.toLowerCase();
+      } else if (typ === "II") {
+        // Keine Eingabe nötig
+        document.getElementById("antwort")?.remove();
+        document.getElementById("check-button").textContent = "Weiter";
       }
     })
     .catch(() => {
       document.querySelector(".frage-text").textContent = "Fehler beim Laden.";
     });
+}
 
-  // Antwort prüfen
+function pruefeAntwort() {
   const input = document.getElementById("antwort");
-  input.addEventListener("keypress", function (e) {
-    if (e.key === "Enter") {
-      const eingabe = input.value.trim().toLowerCase();
-      const korrekt = input.dataset.correct;
-      if (eingabe === korrekt) {
-        alert("Richtig!");
-      } else {
-        alert("Leider falsch!");
-      }
+  const eingabe = input.value.trim().toLowerCase();
+  const korrekt = input.dataset.correct?.toLowerCase();
+  const main = document.querySelector("main") || document.querySelector(".frage-container");
+
+  if (!korrekt || eingabe === "") return;
+
+  if (eingabe === korrekt) {
+    speichereFortschritt(aktuelleKategorie);
+    if (aktuellerIndex + 1 >= kategorien[typ].length) {
+      main.innerHTML = zeigeAbschluss();
+    } else {
+      main.innerHTML = zeigeErfolg();
     }
-  });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  // Typ aus der URL auslesen (?typ=I oder ?typ=II)
-  const typ = new URLSearchParams(window.location.search).get("typ");
-
-  // 1. Body-Klasse setzen (für CSS-Anpassung)
-  if (typ === "I") {
-    document.body.classList.add("typ-i");
-  } else if (typ === "II") {
-    document.body.classList.add("typ-ii");
+  } else {
+    main.innerHTML = zeigeMisserfolg(korrekt);
   }
+}
 
-  // 2. Titel und Icon dynamisch anpassen
-  const titel = document.getElementById("themen-titel");
-  const icon = document.getElementById("themen-icon");
-
-  if (titel && icon) {
-    if (typ === "I") {
-      titel.textContent = "Deine geistige Aufgabe";
-      icon.src = "img/icon-gehirn.svg"; // Pfad ggf. anpassen
-      icon.alt = "Icon für geistige Aufgabe";
-    } else if (typ === "II") {
-      titel.textContent = "Deine körperliche Aufgabe";
-      icon.src = "img/icon-pfote.svg"; // Pfad ggf. anpassen
-      icon.alt = "Icon für körperliche Aufgabe";
-    }
+function speichereFortschritt(kategorie) {
+  const fortschritt = JSON.parse(localStorage.getItem(fortschrittKey) || "[]");
+  if (!fortschritt.includes(kategorie)) {
+    fortschritt.push(kategorie);
+    localStorage.setItem(fortschrittKey, JSON.stringify(fortschritt));
   }
+}
 
-  // 3. Antwortfeld auf Enter überwachen
-  const input = document.getElementById("antwort");
-  if (input) {
-    input.addEventListener("keypress", function (e) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        const antwort = input.value.trim();
-        alert("Danke für deine Antwort: " + antwort);
+function zeigeErfolg() {
+  return `
+    <div class="frage-header">
+      <img src="kopfstand-logo.svg" class="logo-small" />
+      <button class="close-button" onclick="window.location.href='protected.html'">✕</button>
+    </div>
+    <div class="frage-topic">
+      <img src="img/icon-haken.svg" class="feedback-icon" />
+      <h2 class="feedback-titel">Gut gemacht!</h2>
+    </div>
+    <div class="frage-card">
+      <p class="lob-text">Du hast die Aufgabe sicher gemeistert.</p>
+      <button class="naechste-btn" onclick="location.reload()">Nächste Aufgabe</button>
+    </div>
+  `;
+}
 
-        // Optional: Weiterleitung oder Logging je nach Typ
-        if (typ === "I") {
-          console.log("Antwort auf geistige Aufgabe:", antwort);
-        } else if (typ === "II") {
-          console.log("Antwort auf körperliche Aufgabe:", antwort);
-        }
+function zeigeMisserfolg(korrekt) {
+  return `
+    <div class="frage-header">
+      <img src="kopfstand-logo.svg" class="logo-small" />
+      <button class="close-button" onclick="window.location.href='protected.html'">✕</button>
+    </div>
+    <div class="frage-topic">
+      <img src="img/icon-kreuz.svg" class="feedback-icon" />
+      <h2 class="feedback-titel">Noch nicht ganz.</h2>
+    </div>
+    <div class="frage-card">
+      <p class="moegliche-antworten"><strong>Richtige Antwort:</strong><br>${korrekt}</p>
+      <p class="ermutigung">Du hast es versucht – das zählt!<br>Morgen klappt’s besser.</p>
+      <button class="naechste-btn" onclick="location.reload()">Nächste Aufgabe</button>
+    </div>
+  `;
+}
 
-        // window.location.href = "dashboard.html"; // optional aktivieren
-      }
-    });
-  }
-});
+function zeigeAbschluss() {
+  return `
+    <div class="frage-header">
+      <img src="kopfstand-logo.svg" class="logo-small" />
+      <button class="close-button" onclick="window.location.href='protected.html'">✕</button>
+    </div>
+    <div class="frage-topic">
+      <img src="img/icon-flamme.svg" class="feedback-icon" />
+      <h2 class="feedback-titel">Glückwunsch!</h2>
+    </div>
+    <div class="frage-card">
+      <p class="lob-text">
+        Du hast deine Aufgaben gelöst!<br>
+        Deine Erfolgsserie beginnt – Tag 1!
+      </p>
+      <button class="naechste-btn" onclick="window.location.href='protected.html'">Training beenden</button>
+    </div>
+  `;
+}
