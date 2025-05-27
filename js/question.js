@@ -11,7 +11,6 @@ const kategorieListe = kategorien[typ];
 let aktuellerIndex = 0;
 let aktuelleKategorie = "";
 
-// DOM Ready
 document.addEventListener("DOMContentLoaded", () => {
   if (!typ || !kategorieListe) {
     document.querySelector(".frage-text").textContent = "Fehler: Kein gültiger Typ übergeben.";
@@ -19,34 +18,45 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const fortschritt = JSON.parse(localStorage.getItem(fortschrittKey) || "[]");
-  aktuellerIndex = fortschritt.length;
 
-  if (aktuellerIndex >= kategorieListe.length) {
-    zeigeAbschluss();
+  if (fortschritt.length >= kategorieListe.length) {
+    const main = document.querySelector("main") || document.querySelector(".frage-container");
+    main.innerHTML = zeigeAbschluss();
     return;
   }
 
+  aktuellerIndex = fortschritt.length;
   aktuelleKategorie = kategorieListe[aktuellerIndex];
   ladeAufgabe(aktuelleKategorie);
 
   const button = document.getElementById("check-button");
+
   if (typ === "I" && button) {
     button.addEventListener("click", pruefeAntwort);
   } else if (typ === "II" && button) {
     button.addEventListener("click", () => {
-      speichereFortschritt(aktuelleKategorie);
-      location.reload();
+      const erledigt = speichereFortschritt(aktuelleKategorie);
+      if (erledigt >= kategorieListe.length) {
+        const main = document.querySelector("main") || document.querySelector(".frage-container");
+        main.innerHTML = zeigeAbschluss();
+      } else {
+        location.reload();
+      }
     });
   }
 });
 
 function ladeAufgabe(kategorie) {
+  console.log("Lade Aufgabe für Kategorie:", kategorie, "und Typ:", typ);
+
   fetch(`api/question.php?typ=${typ}&kategorie=${encodeURIComponent(kategorie)}`)
     .then(res => res.json())
     .then(data => {
+      console.log("Antwort von question.php:", data);
+
       if (!data || !data.Aufgabe) {
-        document.querySelector(".frage-text").textContent = "Keine Aufgabe gefunden.";
-        console.warn("Antwort von API:", data);
+        document.getElementById("frage-text").textContent = "Keine Aufgabe gefunden.";
+        document.getElementById("themen-titel").textContent = "Fehler beim Laden";
         return;
       }
 
@@ -55,14 +65,32 @@ function ladeAufgabe(kategorie) {
 
       if (typ === "I" && data.Antwort) {
         document.getElementById("antwort").dataset.correct = data.Antwort.toLowerCase();
+        document.getElementById("antwort").value = "";
       } else if (typ === "II") {
-        // Keine Eingabe nötig
         document.getElementById("antwort")?.remove();
         document.getElementById("check-button").textContent = "Weiter";
       }
+
+      const icon = document.getElementById("themen-icon");
+      let iconName = kategorie
+        .toLowerCase()
+        .replaceAll("ä", "ae")
+        .replaceAll("ö", "oe")
+        .replaceAll("ü", "ue")
+        .replaceAll("ß", "ss")
+        .replaceAll(" ", "_");
+
+      icon.src = `img/${iconName}_icon.svg`;
+      icon.alt = `Icon für ${kategorie}`;
+      icon.onerror = () => {
+        console.warn("Konnte Icon nicht laden, verwende Fallback.");
+        icon.src = "img/placeholder_icon.svg";
+      };
     })
-    .catch(() => {
-      document.querySelector(".frage-text").textContent = "Fehler beim Laden.";
+    .catch(err => {
+      console.error("Fehler beim Laden der Aufgabe:", err);
+      document.getElementById("frage-text").textContent = "Fehler beim Abrufen der Aufgabe.";
+      document.getElementById("themen-titel").textContent = "Fehler";
     });
 }
 
@@ -74,9 +102,10 @@ function pruefeAntwort() {
 
   if (!korrekt || eingabe === "") return;
 
+  const anzahlErledigt = speichereFortschritt(aktuelleKategorie);
+
   if (eingabe === korrekt) {
-    speichereFortschritt(aktuelleKategorie);
-    if (aktuellerIndex + 1 >= kategorien[typ].length) {
+    if (anzahlErledigt >= kategorien[typ].length) {
       main.innerHTML = zeigeAbschluss();
     } else {
       main.innerHTML = zeigeErfolg();
@@ -85,13 +114,35 @@ function pruefeAntwort() {
     main.innerHTML = zeigeMisserfolg(korrekt);
   }
 }
-
 function speichereFortschritt(kategorie) {
   const fortschritt = JSON.parse(localStorage.getItem(fortschrittKey) || "[]");
+
+  const heute = new Date().toISOString().slice(0, 10);
+
+  // Fortschritt immer in DB speichern, auch wenn bereits lokal erledigt
+  fetch("api/saveProgress.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({
+      typ: typ,
+      kategorie: kategorie,
+      datum: heute
+    })
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Fehler beim Speichern in DB");
+      return res.json();
+    })
+    .then(data => console.log("Serverantwort:", data))
+    .catch(err => console.error("DB-Speicherung fehlgeschlagen:", err));
+
   if (!fortschritt.includes(kategorie)) {
     fortschritt.push(kategorie);
     localStorage.setItem(fortschrittKey, JSON.stringify(fortschritt));
   }
+
+  return fortschritt.length;
 }
 
 function zeigeErfolg() {
