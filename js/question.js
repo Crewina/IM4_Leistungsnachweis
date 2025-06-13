@@ -1,5 +1,11 @@
-const urlParams = new URLSearchParams(window.location.search);
-const typ = urlParams.get("typ"); // "I" (geistig) oder "II" (körperlich)
+document.addEventListener("DOMContentLoaded", () => {
+  const typ = new URLSearchParams(window.location.search).get("typ");
+  if (typ === "I") {
+    document.body.classList.add("typ-i");
+  } else if (typ === "II") {
+    document.body.classList.add("typ-ii");
+  }
+});
 
 const kategorien = {
   I: ["Langzeitgedächtnis", "Kurzzeitgedächtnis", "Sprachzentrum", "Logik", "Rätsel"],
@@ -50,6 +56,7 @@ function ladeAufgabe(kategorie) {
   console.log("Lade Aufgabe für Kategorie:", kategorie, "und Typ:", typ);
 
   fetch(`api/question.php?typ=${typ}&kategorie=${encodeURIComponent(kategorie)}`)
+
     .then(res => res.json())
     .then(data => {
       console.log("Antwort von question.php:", data);
@@ -82,6 +89,7 @@ function ladeAufgabe(kategorie) {
 
       icon.src = `img/${iconName}_icon.svg`;
       icon.alt = `Icon für ${kategorie}`;
+        
       icon.onerror = () => {
         console.warn("Konnte Icon nicht laden, verwende Fallback.");
         icon.src = "img/placeholder_icon.svg";
@@ -93,6 +101,7 @@ function ladeAufgabe(kategorie) {
       document.getElementById("themen-titel").textContent = "Fehler";
     });
 }
+
 
 function pruefeAntwort() {
   const input = document.getElementById("antwort");
@@ -152,7 +161,7 @@ function zeigeErfolg() {
       <button class="close-button" onclick="window.location.href='protected.html'">✕</button>
     </div>
     <div class="frage-topic">
-      <img src="img/icon-haken.svg" class="feedback-icon" />
+      <img src="img/richtig_icon.svg" class="feedback-icon" />
       <h2 class="feedback-titel">Gut gemacht!</h2>
     </div>
     <div class="frage-card">

@@ -3,25 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kopfstand – Frage</title>
+  <title>Kopfstand – Aufgabe</title>
   <link rel="stylesheet" href="css/style.css" />
+  <script>
+    // Body-Klasse für Hintergrundfarbe setzen
+    const typ = new URLSearchParams(window.location.search).get("typ");
+    if (typ === "I") {
+      document.documentElement.classList.add("typ-i");
+    } else if (typ === "II") {
+      document.documentElement.classList.add("typ-ii");
+    }
+  </script>
 </head>
 <body>
   <div class="frage-container">
 
-    <!-- Header-Bereich -->
+    <!-- Header -->
     <div class="frage-header">
       <img src="/img/kopfstand_logo.png" alt="Kopfstand Logo" class="logo-small" />
       <button class="close-button" onclick="window.location.href='protected.html'">✕</button>
     </div>
 
-    <!-- Icon und Titel (werden dynamisch durch JS gesetzt) -->
+    <!-- Thema -->
     <div class="frage-topic">
       <img id="themen-icon" src="" alt="Aufgaben-Icon" class="elefant-icon" />
       <h2 id="themen-titel">Lade Aufgabe...</h2>
     </div>
 
-    <!-- Fragekarte (Frage und Antwortfeld) -->
+    <!-- Fragekarte -->
     <div class="frage-card">
       <p class="frage-text" id="frage-text">Bitte warten...</p>
       <input type="text" id="antwort" class="antwort-input" placeholder="Schreibe eine Antwort..." />
