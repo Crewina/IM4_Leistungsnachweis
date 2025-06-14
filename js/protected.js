@@ -39,6 +39,8 @@ async function checkAuth() {
       <img src="img/fortschritt_icon.svg" alt="Flammen-Icon" class="card-icon" />
     </a>    
 
+    <button id="logoutBtn">Logout</button>
+
       </main>
     `;
 

@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email    = trim($_POST['email'] ?? '');
     $password = trim($_POST['password'] ?? '');
     $user_name = trim($_POST['user_name'] ?? '');
+    $profile = $_FILES['profile'] ?? null;
 
     if (!$email || !$password|| !$user_name) {
         echo json_encode(["status" => "error", "message" => "Email, password and name are required"]);
@@ -27,11 +28,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     // Insert the new user
-    $insert = $pdo->prepare("INSERT INTO users (email, password, name) VALUES (:email, :pass, :user_name)");
+    $insert = $pdo->prepare("INSERT INTO users (email, password, name, profile) VALUES (:email, :pass, :user_name, :profile)");
     $insert->execute([
         ':email' => $email,
         ':pass'  => $hashedPassword,
-        ':user_name'  => $user_name
+        ':user_name'  => $user_name,
+        ':profile' => $profile ? file_get_contents($profile['tmp_name']) : null
     ]);
 
     echo json_encode(["status" => "success"]);

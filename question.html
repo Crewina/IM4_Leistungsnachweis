@@ -5,15 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kopfstand – Aufgabe</title>
   <link rel="stylesheet" href="css/style.css" />
-  <script>
-    // Body-Klasse für Hintergrundfarbe setzen
-    const typ = new URLSearchParams(window.location.search).get("typ");
-    if (typ === "I") {
-      document.documentElement.classList.add("typ-i");
-    } else if (typ === "II") {
-      document.documentElement.classList.add("typ-ii");
-    }
-  </script>
 </head>
 <body>
   <div class="frage-container">
@@ -39,6 +30,11 @@
 
   </div>
 
+  <script 
+    src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js" 
+    crossorigin="anonymous" 
+    referrerpolicy="no-referrer">
+  </script>
   <script src="js/question.js"></script>
 </body>
 </html>

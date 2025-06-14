@@ -1,11 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const typ = new URLSearchParams(window.location.search).get("typ");
-  if (typ === "I") {
-    document.body.classList.add("typ-i");
-  } else if (typ === "II") {
-    document.body.classList.add("typ-ii");
-  }
-});
+var typ = new URLSearchParams(window.location.search).get("typ");
 
 const kategorien = {
   I: ["Langzeitgedächtnis", "Kurzzeitgedächtnis", "Sprachzentrum", "Logik", "Rätsel"],
@@ -16,12 +9,23 @@ const fortschrittKey = typ === "I" ? "geistigeFortschritt" : "koerperFortschritt
 const kategorieListe = kategorien[typ];
 let aktuellerIndex = 0;
 let aktuelleKategorie = "";
+let streak;
 
-document.addEventListener("DOMContentLoaded", () => {
-  if (!typ || !kategorieListe) {
+document.addEventListener("DOMContentLoaded", async () => {
+  if (!typ) {
     document.querySelector(".frage-text").textContent = "Fehler: Kein gültiger Typ übergeben.";
     return;
   }
+
+  // Body-Klasse für Hintergrundfarbe setzen
+  if (typ === "I") {
+    document.body.classList.add("typ-i");
+  } else if (typ === "II") {
+    document.body.classList.add("typ-ii");
+  }
+
+  deleteOldProgressData();
+  streak = claculateStreak(await getProgress());
 
   const fortschritt = JSON.parse(localStorage.getItem(fortschrittKey) || "[]");
 
@@ -41,9 +45,10 @@ document.addEventListener("DOMContentLoaded", () => {
     button.addEventListener("click", pruefeAntwort);
   } else if (typ === "II" && button) {
     button.addEventListener("click", () => {
-      const erledigt = speichereFortschritt(aktuelleKategorie);
+      const erledigt = speichereFortschrittLokal(aktuelleKategorie);
       if (erledigt >= kategorieListe.length) {
         const main = document.querySelector("main") || document.querySelector(".frage-container");
+        speichereStrike(typ);
         main.innerHTML = zeigeAbschluss();
       } else {
         location.reload();
@@ -79,13 +84,7 @@ function ladeAufgabe(kategorie) {
       }
 
       const icon = document.getElementById("themen-icon");
-      let iconName = kategorie
-        .toLowerCase()
-        .replaceAll("ä", "ae")
-        .replaceAll("ö", "oe")
-        .replaceAll("ü", "ue")
-        .replaceAll("ß", "ss")
-        .replaceAll(" ", "_");
+      const iconName = kategorie.replaceAll(' ', '_').toLowerCase();
 
       icon.src = `img/${iconName}_icon.svg`;
       icon.alt = `Icon für ${kategorie}`;
@@ -111,7 +110,11 @@ function pruefeAntwort() {
 
   if (!korrekt || eingabe === "") return;
 
-  const anzahlErledigt = speichereFortschritt(aktuelleKategorie);
+  const anzahlErledigt = speichereFortschrittLokal(aktuelleKategorie);
+
+  if (anzahlErledigt >= kategorien[typ].length) {
+    speichereStrike(typ);
+  }
 
   if (eingabe === korrekt) {
     if (anzahlErledigt >= kategorien[typ].length) {
@@ -123,9 +126,28 @@ function pruefeAntwort() {
     main.innerHTML = zeigeMisserfolg(korrekt);
   }
 }
-function speichereFortschritt(kategorie) {
-  const fortschritt = JSON.parse(localStorage.getItem(fortschrittKey) || "[]");
 
+function speichereFortschrittLokal(kategorie) {
+  const fortschritt = JSON.parse(localStorage.getItem(fortschrittKey) || "[]");
+  const heute = new Date().toISOString().slice(0, 10);
+
+  if (!fortschritt.includes(kategorie)) {
+    fortschritt.push({ kategorie, heute });
+    localStorage.setItem(fortschrittKey, JSON.stringify(fortschritt));
+  }
+
+  return fortschritt.length;
+}
+
+function deleteOldProgressData() {
+  let fortschritt = JSON.parse(localStorage.getItem(fortschrittKey) || "[]");
+  const heute = new Date().toISOString().slice(0, 10);
+
+  fortschritt = fortschritt.filter(item => item.heute === heute);
+  localStorage.setItem(fortschrittKey, JSON.stringify(fortschritt));
+}
+
+function speichereStrike(typ) {
   const heute = new Date().toISOString().slice(0, 10);
 
   // Fortschritt immer in DB speichern, auch wenn bereits lokal erledigt
@@ -135,7 +157,6 @@ function speichereFortschritt(kategorie) {
     credentials: "include",
     body: JSON.stringify({
       typ: typ,
-      kategorie: kategorie,
       datum: heute
     })
   })
@@ -145,23 +166,16 @@ function speichereFortschritt(kategorie) {
     })
     .then(data => console.log("Serverantwort:", data))
     .catch(err => console.error("DB-Speicherung fehlgeschlagen:", err));
-
-  if (!fortschritt.includes(kategorie)) {
-    fortschritt.push(kategorie);
-    localStorage.setItem(fortschrittKey, JSON.stringify(fortschritt));
-  }
-
-  return fortschritt.length;
 }
 
 function zeigeErfolg() {
   return `
     <div class="frage-header">
-      <img src="kopfstand-logo.svg" class="logo-small" />
+      <img src="img/kopfstand_logo.png" class="logo-small" />
       <button class="close-button" onclick="window.location.href='protected.html'">✕</button>
     </div>
     <div class="frage-topic">
-      <img src="img/richtig_icon.svg" class="feedback-icon" />
+      <img src="img/richtig_icon.svg" class="feedback-icon elefant-icon" />
       <h2 class="feedback-titel">Gut gemacht!</h2>
     </div>
     <div class="frage-card">
@@ -174,11 +188,11 @@ function zeigeErfolg() {
 function zeigeMisserfolg(korrekt) {
   return `
     <div class="frage-header">
-      <img src="kopfstand-logo.svg" class="logo-small" />
+      <img src="img/kopfstand_logo.png" class="logo-small" />
       <button class="close-button" onclick="window.location.href='protected.html'">✕</button>
     </div>
     <div class="frage-topic">
-      <img src="img/icon-kreuz.svg" class="feedback-icon" />
+      <img src="img/falsch_icon.svg" class="feedback-icon elefant-icon" />
       <h2 class="feedback-titel">Noch nicht ganz.</h2>
     </div>
     <div class="frage-card">
@@ -189,22 +203,54 @@ function zeigeMisserfolg(korrekt) {
   `;
 }
 
-function zeigeAbschluss() {
+ function zeigeAbschluss() {
+  const type1 = document.querySelector('body').classList.contains('typ-i');
+
   return `
     <div class="frage-header">
-      <img src="kopfstand-logo.svg" class="logo-small" />
+      <img src="img/${type1 ? "kopfstand_blau.png" : "kopfstand_gelb.png"}" class="logo-small" />
       <button class="close-button" onclick="window.location.href='protected.html'">✕</button>
     </div>
     <div class="frage-topic">
-      <img src="img/icon-flamme.svg" class="feedback-icon" />
+      <img src="img/${type1 ? "fortschritt_blau.svg" : "fortschritt_gelb.svg"}" class="feedback-icon elefant-icon" />
       <h2 class="feedback-titel">Glückwunsch!</h2>
     </div>
     <div class="frage-card">
       <p class="lob-text">
         Du hast deine Aufgaben gelöst!<br>
-        Deine Erfolgsserie beginnt – Tag 1!
+        ${streak == 1 ? "Deine Erfolgsserie beginnt – Tag 1!" : streak + " Tage am Stück erledigt!"}
       </p>
       <button class="naechste-btn" onclick="window.location.href='protected.html'">Training beenden</button>
     </div>
   `;
+}
+
+async function getProgress() {
+  const response = await fetch("api/getProgress.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+  });
+
+  if (!response.ok) {
+      throw new Error("Failed to fetch progress data");
+  }
+
+  return await response.json();
+}
+
+function claculateStreak(data) {
+  const date = moment();
+  let streak = 0;
+
+  for (let i = 0; i < data.length; i++) {
+      if (data[i].Datum == date.format("YYYY-MM-DD") && data[i].Erledigt == 2) {
+          date.subtract(1, 'days');
+          streak++;
+      } else {
+          break;
+      }
+  }
+
+  return streak;
 }

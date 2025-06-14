@@ -1,27 +1,28 @@
 <?php
 header('Content-Type: application/json');
 require_once 'config.php';
+session_start();
 
 // Eingehende JSON-Daten lesen
 $daten = json_decode(file_get_contents("php://input"), true);
 
 // Prüfen, ob die nötigen Felder vorhanden sind
-if (!isset($daten['typ'], $daten['kategorie'], $daten['datum'])) {
+if (!isset($daten['typ'], $daten['datum'])) {
   http_response_code(400);
   echo json_encode(['error' => 'Fehlende Parameter']);
   exit;
 }
 
 $typ = $daten['typ'];
-$kategorie = $daten['kategorie'];
 $datum = $daten['datum'];
+$userId = $_SESSION['user_id'];
 
 try {
   // Prüfen, ob der Eintrag für diesen Tag bereits existiert
-  $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM Fortschritt WHERE Typ = :typ AND Kategorie = :kategorie AND Datum = :datum");
+  $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM Fortschritt WHERE UserId = :userId AND Typ = :typ AND Datum = :datum");
   $checkStmt->execute([
     'typ' => $typ,
-    'kategorie' => $kategorie,
+    'userId' => $userId,
     'datum' => $datum
   ]);
 
@@ -32,11 +33,11 @@ try {
     echo json_encode(['message' => 'Eintrag bereits vorhanden']);
   } else {
     // Eintrag neu speichern
-    $stmt = $pdo->prepare("INSERT INTO Fortschritt (Typ, Kategorie, Datum, Erledigt) VALUES (:typ, :kategorie, :datum, 1)");
+    $stmt = $pdo->prepare("INSERT INTO Fortschritt (Typ, Datum, UserId, Erledigt) VALUES (:typ, :datum, :userId, 1)");
     $stmt->execute([
       'typ' => $typ,
-      'kategorie' => $kategorie,
-      'datum' => $datum
+      'datum' => $datum,
+      'userId' => $userId
     ]);
     echo json_encode(['success' => true]);
   }
