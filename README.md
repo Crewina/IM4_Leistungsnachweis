@@ -27,6 +27,10 @@ Da uns die Erfahrung und Routine mit GitHub fehlt, wussten wir nicht, wie wir es
 Zu Beginn des Projekts hatten wir geplant, eine grössere Vielfalt an Fragetypen in die App zu integrieren. Im Laufe der Umsetzung zeigte sich jedoch, dass alle Antworten überprüfbar und eindeutig richtig sein müssen und mit der in der Datenbank vordefinierten Lösung übereinstimmen müssen. Daher haben wir uns bewusst auf Fragetypen mit klaren, kurzen Lösungen beschränkt, was die Gestaltungsmöglichkeiten etwas einschränkte, aber die technische Umsetzbarkeit deutlich erleichterte.
 Unser Fragenkatalog ist in der Datenbank beliebig erweiterbar. Aktuell enthält er eine begrenzte, aber ausreichende Anzahl an Fragen, um die App mehrfach durchzuspielen und das Funktionsprinzip zu verstehen und zu testen.
 
+**- Responsivness**
+
+Uns bewusst, dass die Responsivität nicht in allen Bereichen zu 100% vorhanden ist. Da wir bereits stark mit anderen Funktionen unserer App, wie unter anderem den drei Datenbanken, dem Strike-Feature und den verschiedenen Anzeigemasken, gefordert waren, reichten unsere Kapazitäten am Ende leider nicht ganz aus, die Responsivness überall vollständig zu gewährleisten. Für künftige Projekte nehmen wir mit, diesen Aspekt frühzeitiger zu berücksichtigen.
+
 ## Schwierigkeiten
 
 **-	Infomaniak**
@@ -48,6 +52,10 @@ Das wie in den Learnings bereits erwähnte Löschen der lokalen Dateien und des 
 **-	Verbindung mit der Datenbank**
 
 Als wir im PHP-File über Visual Studio Code auf die Datenbank zugreifen wollten, funktionierte dies zunächst nicht. Auf der Website erschien lediglich die Fehlermeldung «Lade Aufgabe». Nach mehreren Stunden Fehlersuche erstellte Ricarda testweise eine neue Datenbanktabelle – und mit dieser funktionierte der Zugriff plötzlich einwandfrei. Die Ursache lag an einem von ChatGPT vorgeschlagenen Datentyp: Der in phpMyAdmin gesetzte Typ «ENUM» für die Aufgabenarten (Typ I und II) führte zu Problemen beim Datenbankzugriff. Zudem musste der Datenbankname in phpMyAdmin nochmals manuell angepasst werden, damit die Verbindung korrekt hergestellt werden konnte.
+
+**- Schritteziel**
+
+Die Grafik für das Schrittziel liess sich in dieser Form leider nicht umsetzen, da wir keinen Zugriff auf die Bewegungsdaten der UserInnen haben. Zudem hätte eine solche Umsetzung unser technisches Know-How überschritten.
 
 ## **Benutzte Ressourcen**
 
