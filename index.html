@@ -1,36 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Welcome</title>
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
-  <body>
-    <h1>Welcome to IM4 Demo Page</h1>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kopfstand – Login</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="header-inline">
+      <img src="img/kopfstand_blau.png" alt="Kopfstand Logo" class="logo" />
+      <h1>Kopfstand</h1>
+    </header>
+    <p class="subtitle">Deine tägliche Portion Bewegung und Denksport</p>
 
-    <div class="navigation">
-      <ul>
-        <li><a href="login.html">Login</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li>
-          <a href="protected.html">Protected Page</a> (only visible when logged
-          in)
-        </li>
-      </ul>
-    </div>
+    <main class="login-box">
+      <h2>Anmelden</h2>
 
-    <div class="info">
-      <h2>About This Page</h2>
-      <p>This is a simple authentication demo that shows:</p>
-      <ul>
-        <li>User registration</li>
-        <li>User login</li>
-        <li>Protected content that's only visible to logged-in users</li>
-      </ul>
-      <p>
-        If you try to access the protected page without being logged in, you'll
-        be redirected to the login page.
-      </p>
-    </div>
-  </body>
+      <form id="loginForm">
+        <div>
+          <label for="email">Emailadresse</label>
+          <input type="email" id="email" placeholder="max.muster@gmail.com" required />
+        </div>
+        <div>
+          <label for="password">Passwort</label>
+          <input type="password" id="password" placeholder="******" required />
+        </div>
+        <button type="submit">Anmelden</button>
+      </form>
+
+      <div class="register-hint">
+        <p>Noch kein Konto?</p>
+        <a href="register.html">→ Jetzt registrieren</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.body.classList.add("typ-ii"); // Für einheitlichen Look wie bei körperlichen Aufgaben
+  </script>
+  <script src="js/login.js"></script>
+</body>
 </html>

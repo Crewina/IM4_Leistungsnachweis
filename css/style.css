@@ -321,13 +321,6 @@ body.fortschritt-seite {
   cursor: pointer;
 }
 
-body.typ-i {
-  background-color: #f3e5f5; /* Lila für geistige Aufgaben */
-}
-
-body.typ-ii {
-  background-color: #e0f7fa; /* Türkis für körperliche Aufgaben */
-}
 
 body.geschuetzt-seite {
   display: flex;
@@ -440,4 +433,21 @@ h1 {
   font-weight: bold;
 }
 
+.header-inline {
+  display: flex;
+  align-items: flex-end; /* statt center */
+  gap: 1rem;
+}
+
+.header-inline .logo {
+  height: 150px; /* Grösse des Logos */
+}
+
+@media (max-width: 480px) {
+  .header-inline {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
 
