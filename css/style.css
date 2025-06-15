@@ -347,3 +347,97 @@ body.fortschritt-seite {
   margin-right: auto;
   min-width: 50%;
 }
+/* Registrieren-Seite – Hintergrundverlauf und Layout */
+body.register-seite {
+  background: linear-gradient(to bottom left, #f0eaff 60%, #ffe69d 60%);
+  font-family: Arial, sans-serif;
+  color: #0a003d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+header .logo {
+  margin-bottom: 0.5rem;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #5a00ff;
+  margin: 0.2rem 0;
+}
+
+.subtitle {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.login-box {
+  background: white;
+  border: 2px solid #5a00ff;
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  text-align: left;
+}
+
+.login-box h2 {
+  text-align: center;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  color: #0a003d;
+}
+
+.login-box label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: bold;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.login-box button {
+  width: 100%;
+  padding: 0.8rem;
+  font-weight: bold;
+  border: 2px solid #0a003d;
+  background: white;
+  color: #0a003d;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.login-box button:hover {
+  background-color: #f0f0f0;
+}
+
+.register-hint {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.register-hint a {
+  color: #5a00ff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+
